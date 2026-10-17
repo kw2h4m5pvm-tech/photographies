@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Photographies de voyage</title>
+<meta name="description" content="Photographies de voyage">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script>try { const t = localStorage.getItem("theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}</script>
+</head>
+<body>
+<header class="top">
+  <nav class="crumbs"></nav>
+  <nav class="menu">
+    <a href="#/" data-tab="home">Accueil</a>
+    <a href="#/lieux" data-tab="lieux">Lieux</a>
+    <button class="theme"></button>
+  </nav>
+</header>
+
+<main id="app"></main>
+
+<div id="lightbox" hidden>
+  <button class="lb-close" aria-label="Fermer">Fermer</button>
+  <button class="lb-prev" aria-label="Précédente">←</button>
+  <img alt="">
+  <button class="lb-next" aria-label="Suivante">→</button>
+  <div class="lb-count"></div>
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

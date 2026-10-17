@@ -1,0 +1,137 @@
+:root {
+  --bg: #ebe8e2;
+  --ink: #1c1b19;
+  --muted: #8a867e;
+  --line: rgba(28, 27, 25, .14);
+  --shadow: 0 1px 2px rgba(0,0,0,.06), 0 12px 40px rgba(0,0,0,.12);
+  --serif: "Instrument Serif", Georgia, serif;
+  --sans: "Inter", system-ui, sans-serif;
+  --pad: clamp(16px, 4vw, 56px);
+  --sw: 58vw; /* largeur d'un lieu dans le défilement */
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #161615;
+    --ink: #f3f0ea;
+    --muted: rgba(243, 240, 234, .5);
+    --line: rgba(243, 240, 234, .14);
+    --shadow: 0 2px 4px rgba(0,0,0,.2), 0 24px 60px rgba(0,0,0,.5);
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #161615;
+  --ink: #f3f0ea;
+  --muted: rgba(243, 240, 234, .5);
+  --line: rgba(243, 240, 234, .14);
+  --shadow: 0 2px 4px rgba(0,0,0,.2), 0 24px 60px rgba(0,0,0,.5);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-text-size-adjust: 100%; }
+body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-size: 13px; letter-spacing: .01em; transition: background-color .5s ease, color .5s ease; }
+a { color: inherit; text-decoration: none; }
+img { display: block; max-width: 100%; height: auto; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+.label, .top { text-transform: uppercase; letter-spacing: .14em; font-size: 11px; color: var(--muted); }
+
+/* En-tête : fil d'Ariane */
+.top { position: absolute; top: 0; left: 0; right: 0; z-index: 2; padding: 24px var(--pad); display: flex; align-items: baseline; gap: 32px; }
+.theme { text-transform: inherit; letter-spacing: inherit; font-size: inherit; color: inherit; }
+.theme:hover { color: var(--ink); }
+.top a:hover { color: var(--ink); }
+.top .sep { margin: 0 10px; opacity: .5; }
+.top .here { color: var(--ink); }
+.menu { display: flex; gap: 28px; white-space: nowrap; margin-left: auto; }
+.menu .theme { padding-left: 28px; border-left: 1px solid var(--line); }
+
+/* Accueil : les favoris, comme les pages d'un livre */
+.home { padding: 12vh var(--pad) 0; }
+.scroll-hint { position: fixed; right: var(--pad); bottom: 32px; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 14px; pointer-events: none; transition: opacity .6s ease; animation: in 1s ease 1.2s backwards; }
+.scroll-hint.gone { opacity: 0; }
+.scroll-hint i { position: relative; width: 1px; height: 64px; background: var(--line); overflow: hidden; }
+.scroll-hint i::after { content: ""; position: absolute; left: 0; top: 0; width: 1px; height: 24px; background: var(--ink); animation: drip 2.2s cubic-bezier(.65, 0, .35, 1) infinite; }
+@keyframes drip { from { transform: translateY(-24px); } to { transform: translateY(64px); } }
+.feature { --w: 60vw; display: flex; align-items: flex-end; gap: clamp(20px, 3vw, 48px); margin-bottom: 24vh; opacity: 0; transform: translateY(40px); transition: opacity 1.2s ease, transform 1.2s ease; }
+.feature.portrait { --w: 36vw; }
+.feature.in { opacity: 1; transform: none; }
+.feature img { flex: none; width: min(var(--w), calc(84vh * var(--r))); box-shadow: var(--shadow); cursor: zoom-in; }
+.home > .feature:first-child img { width: min(var(--w), calc((100vh - 12vh - 72px) * var(--r))); } /* la 1re photo tient dans l'écran */
+.feature.f0 { padding-left: 8vw; }
+.feature.f1 { flex-direction: row-reverse; }
+.feature.f2 { flex-direction: column; align-items: center; }
+.feature figcaption { display: flex; flex-direction: column; gap: 10px; }
+.feature.f1 figcaption { text-align: right; }
+.feature.f2 figcaption { align-items: center; text-align: center; }
+.feature figcaption a { font-family: var(--serif); font-size: clamp(28px, 3vw, 44px); line-height: 1; transition: color .3s; }
+.feature figcaption a .label { display: block; margin-top: 10px; }
+.feature figcaption a:hover { color: var(--muted); }
+
+main { animation: in .6s ease; }
+@keyframes in { from { opacity: 0; } }
+
+/* Défilement horizontal des lieux */
+.slider { height: 100vh; height: 100svh; overflow: hidden; position: relative; touch-action: pan-y; }
+.track { display: flex; height: 100%; transition: transform .9s cubic-bezier(.65, 0, .25, 1); transform: translateX(calc(50vw - var(--sw) * (var(--i, 0) + .5))); }
+.slide { flex: 0 0 var(--sw); height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 2.5vw; opacity: .18; transform: scale(.82); transition: opacity .9s ease, transform .9s cubic-bezier(.65, 0, .25, 1); }
+.slide.on { opacity: 1; transform: none; }
+.slide img { max-height: 62vh; width: auto; box-shadow: var(--shadow); cursor: pointer; }
+.slide .caption { margin-top: 4vh; text-align: center; opacity: 0; transform: translateY(10px); transition: opacity .6s ease .3s, transform .6s ease .3s; }
+.slide.on .caption { opacity: 1; transform: none; }
+.slide h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(44px, 6vw, 92px); line-height: 1; letter-spacing: -.01em; margin-bottom: 10px; }
+
+.arrow { position: absolute; top: 50%; translate: 0 -50%; z-index: 1; width: 64px; height: 64px; border-radius: 50%; border: 1px solid var(--line); font-size: 18px; transition: background-color .3s, border-color .3s, opacity .3s; }
+.arrow:hover { background: var(--line); border-color: var(--muted); }
+.arrow:disabled { opacity: 0; pointer-events: none; }
+.arrow.prev { left: var(--pad); }
+.arrow.next { right: var(--pad); }
+.count { position: absolute; bottom: 28px; left: 0; right: 0; text-align: center; font-variant-numeric: tabular-nums; }
+
+/* Mosaïque d'un lieu */
+.series { padding: 0 var(--pad); }
+.series-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; padding: 22vh 0 8vh; }
+.series-head h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(56px, 10vw, 148px); line-height: .9; letter-spacing: -.02em; }
+
+.grid { display: flex; align-items: flex-start; gap: clamp(20px, 3vw, 48px); }
+.grid .col { flex: 1; min-width: 0; }
+.grid figure { margin-bottom: clamp(20px, 3vw, 48px); cursor: zoom-in; }
+.grid img { width: 100%; box-shadow: var(--shadow); opacity: 0; transition: opacity .8s ease, transform .5s ease; }
+.grid img.loaded { opacity: 1; }
+.grid figure:hover img { transform: translateY(-3px); }
+
+.next-place { display: block; text-align: right; padding: 10vh 0 8vh; border-top: 1px solid var(--line); margin-top: 6vh; }
+.next-place .name { display: block; font-family: var(--serif); font-size: clamp(40px, 7vw, 96px); line-height: 1; margin-top: 10px; transition: color .3s; }
+.next-place:hover .name { color: var(--muted); }
+
+/* Visionneuse */
+#lightbox { position: fixed; inset: 0; z-index: 10; background: var(--bg); transition: background-color .6s ease; display: flex; align-items: center; justify-content: center; padding: 64px 72px; animation: in .3s ease; }
+#lightbox[hidden] { display: none; }
+#lightbox img { max-width: 100%; max-height: 100%; width: auto; object-fit: contain; box-shadow: var(--shadow); }
+.lb-close { position: absolute; top: 24px; right: var(--pad); text-transform: uppercase; letter-spacing: .14em; font-size: 11px; color: var(--muted); }
+.lb-prev, .lb-next { position: absolute; top: 0; bottom: 0; width: 72px; font-size: 20px; color: var(--muted); }
+.lb-prev:hover, .lb-next:hover, .lb-close:hover { color: var(--ink); }
+.lb-prev { left: 0; }
+.lb-next { right: 0; }
+.lb-count { position: absolute; bottom: 24px; left: 0; right: 0; text-align: center; color: var(--muted); letter-spacing: .14em; font-size: 11px; text-transform: uppercase; }
+
+/* Mobile */
+@media (max-width: 700px) {
+  .crumbs { display: none; }
+  .top { gap: 16px; }
+  .menu { gap: 16px; letter-spacing: .08em; }
+  .menu .theme { padding-left: 16px; }
+  .home { padding-top: 12vh; }
+  .scroll-hint { bottom: 20px; gap: 10px; }
+  .scroll-hint i { height: 44px; }
+  .feature, .feature.f0, .feature.f1, .feature.f2 { flex-direction: column; align-items: flex-start; padding: 0; margin-bottom: 12vh; gap: 16px; }
+  .feature img, .home > .feature:first-child img { width: 100%; }
+  .home > .feature:first-child { margin-bottom: 24vh; }
+  .feature.f1 figcaption, .feature.f2 figcaption { align-items: flex-start; text-align: left; }
+  :root { --sw: 84vw; }
+  .slide { padding: 0 3vw; }
+  .slide img { max-height: 56vh; }
+  .arrow { top: auto; bottom: 16px; translate: none; width: 48px; height: 48px; }
+  .count { bottom: 32px; }
+  .series-head { flex-direction: column; align-items: flex-start; padding-top: 16vh; }
+  #lightbox { padding: 56px 12px; }
+  .lb-prev, .lb-next { width: 40%; opacity: 0; }
+}
