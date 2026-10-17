@@ -9,15 +9,6 @@
   --pad: clamp(16px, 4vw, 56px);
   --sw: 58vw; /* largeur d'un lieu dans le défilement */
 }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #161615;
-    --ink: #f3f0ea;
-    --muted: rgba(243, 240, 234, .5);
-    --line: rgba(243, 240, 234, .14);
-    --shadow: 0 2px 4px rgba(0,0,0,.2), 0 24px 60px rgba(0,0,0,.5);
-  }
-}
 :root[data-theme="dark"] {
   --bg: #161615;
   --ink: #f3f0ea;
@@ -106,7 +97,7 @@ main { animation: in .6s ease; }
 #lightbox { position: fixed; inset: 0; z-index: 10; background: var(--bg); transition: background-color .6s ease; display: flex; align-items: center; justify-content: center; padding: 64px 72px; animation: in .3s ease; }
 #lightbox[hidden] { display: none; }
 #lightbox img { max-width: 100%; max-height: 100%; width: auto; object-fit: contain; box-shadow: var(--shadow); }
-.lb-close { position: absolute; top: 24px; right: var(--pad); text-transform: uppercase; letter-spacing: .14em; font-size: 11px; color: var(--muted); }
+.lb-close { position: absolute; z-index: 1; top: 12px; right: calc(var(--pad) - 12px); padding: 12px; text-transform: uppercase; letter-spacing: .14em; font-size: 11px; color: var(--muted); }
 .lb-prev, .lb-next { position: absolute; top: 0; bottom: 0; width: 72px; font-size: 20px; color: var(--muted); }
 .lb-prev:hover, .lb-next:hover, .lb-close:hover { color: var(--ink); }
 .lb-prev { left: 0; }

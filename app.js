@@ -18,8 +18,8 @@ let index = 0;       // photo ouverte dans la visionneuse
 const pad = n => String(n).padStart(2, "0");
 const total = n => n.children ? n.children.reduce((s, c) => s + total(c), 0) : n.photos.length;
 
-// Mode clair / sombre : suit l'appareil, sauf si le visiteur a choisi
-const dark = () => (document.documentElement.dataset.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")) === "dark";
+// Mode clair / sombre : clair par défaut, sauf si le visiteur a choisi le sombre
+const dark = () => document.documentElement.dataset.theme === "dark";
 const themeLabel = () => { themeBtn.textContent = dark() ? "Mode clair" : "Mode sombre"; };
 themeBtn.onclick = () => {
   const t = dark() ? "light" : "dark";
@@ -27,7 +27,6 @@ themeBtn.onclick = () => {
   try { localStorage.setItem("theme", t); } catch (e) {}
   themeLabel();
 };
-matchMedia("(prefers-color-scheme: dark)").addEventListener("change", themeLabel);
 themeLabel();
 
 function crumbs(node) {
@@ -178,6 +177,14 @@ function close() {
   document.body.style.overflow = "";
 }
 
+// Fermer la visionneuse ramène la page sur la dernière photo regardée
+function closeToPhoto() {
+  close();
+  const el = app.querySelector(`[data-i="${index}"]`);
+  el.closest(".feature")?.classList.add("in");
+  el.scrollIntoView({ block: "center" });
+}
+
 function route() {
   close();
   slider = current = null;
@@ -195,14 +202,14 @@ function route() {
   window.scrollTo(0, 0);
 }
 
-lb.querySelector(".lb-close").onclick = close;
+lb.querySelector(".lb-close").onclick = closeToPhoto;
 lb.querySelector(".lb-prev").onclick = () => open(index - 1);
 lb.querySelector(".lb-next").onclick = () => open(index + 1);
 lbImg.onclick = () => open(index + 1);
 
 document.addEventListener("keydown", e => {
   if (!lb.hidden) {
-    if (e.key === "Escape") close();
+    if (e.key === "Escape") closeToPhoto();
     if (e.key === "ArrowRight") open(index + 1);
     if (e.key === "ArrowLeft") open(index - 1);
   } else if (slider) {
